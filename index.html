@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="index.css">
+    <title>Books</title>
+</head>
+<body>
+
+<div class="container pt-5" id="app">
+    <div class="row mb-3">
+        <div class="col">
+            <h1>Books</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-md-4">
+            <div class="form-group">
+                <input type="text" class="form-control" id="search" placeholder="Find books" v-model="search"/>
+            </div>
+            
+            <hr>
+
+            <ul v-for = "(book, index) in filteredBooks" class="list-group">
+                <li class = "list-group-item list-group-item-action pointer" 
+                    v-on:click = "selectBook(index)" v-bind:class = "{'active': selectBookIndex === index}">
+                    {{ book.name }}
+                </li>
+            </ul>
+        </div>
+       
+        <div class="col-md-8">
+            <div class="row">
+                <div class="md-5 mr-5">
+                    <h2>{{ book.name }}</h2>
+                    <img  v-bind:src="book.img" v-bind:alt = "book.name" class="rounded detailed-framework-img"/>
+                </div>
+                <div class="md-7 pt-2">
+                    <h5>Details</h5>
+                    <ul>
+                        <li>Year - {{ book.year }}</li>
+                        <li>Author - {{ book.author }}</li>
+                        <li>Price - {{ book.price }} Euro</li>
+                    </ul>
+                    <button class="btn btn-outline-success mr-3" v-on:click = "readVisibility = true">Read Fragment</button>
+                    <button class="btn btn-primary" v-on:click = "modalVisibility = true">Buy</button>
+                    
+                    <hr>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="row" v-if="logs.length !== 0">
+            <div class="col-md-12">
+                <ul class="list-group">
+                    <li v-for="log in logs" 
+                        class="list-group-item" 
+                        v-bind:class="{
+                            'list-group-item-secondary' : log.type === 'cnl', 
+                            'list-group-item-success' : log.type === 'ok' 
+                        }">
+                        {{log.date | date }} - {{ log.text }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!--modal to buy-->
+    <transition name="buyModal">
+    <div class="modal fade show" tabindex="-1" role="dialog" v-if = "modalVisibility">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title">Cart</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close" v-on:click = "modalVisibility = false">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+              <p>Your book is - {{ book.name }}</p>
+
+              <ul>
+                <li>Year - {{ book.year }}</li>
+                <li>Autor - {{ book.author }}</li>
+                <li>Price - {{ book.price }} Euro</li>
+              </ul>
+
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click="cancelOrder">Cancel</button>
+              <button type="button" class="btn btn-primary" v-on:click="buyOrder">Buy</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      </transition>
+
+      <transition name="fade">
+      <div class="modal-backdrop fade show" v-if="modalVisibility"></div> 
+      </transition>
+    <!--end modal to buy-->
+
+        <!--modal to read fragment -->
+        <transition name="buyModal">
+        <div class="modal fade show" tabindex="-1" role="dialog" v-if = "readVisibility">
+                <div class="modal-dialog" role="document">
+                  <div class="modal-content">
+                    <div class="modal-header">
+                      <h5 class="modal-title">Read Fragment of {{ book.name }}</h5>
+                      <button type="button" class="close" data-dismiss="modal" aria-label="Close" v-on:click = "readVisibility = false">
+                        <span aria-hidden="true">&times;</span>
+                      </button>
+                    </div>
+                    <div class="modal-body">
+                        <img v-bind:src="book.text" class="rounded fragment-img"/>
+                    </div>
+                    <div class="modal-footer">
+                      <button type="button" class="btn btn-secondary" data-dismiss="modal" v-on:click="readVisibility = false">Close</button>
+                      <button type="button" class="btn btn-primary" v-on:click="buyOrder">Buy</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              </transition>
+
+              <transition name="fade">
+              <div class="modal-backdrop fade show" v-if="readVisibility"></div>  
+              </transition>  
+        </div>
+        <!-- end modal to read fragment -->
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>  
+<script src="index.js"></script>
+</body>
+</html>

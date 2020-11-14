@@ -1,0 +1,48 @@
+.detailed-framework-img{
+    height: 250px;
+    width: 250px;
+}
+
+.fragment-img{
+    height: 400px;
+    width: 470px;
+}
+
+.pointer{
+    cursor: pointer;
+}
+
+.modal{
+    display: block;
+}
+
+/* Animation modals windows */
+
+.buyModal-enter-active, .buyModal-leave-active{
+    transition: all .6s;
+}
+
+.buyModal-enter, .buyModal-leave-to{
+    transform: translateY(-100px);
+}
+
+.fade-enter-active{
+    animation: fade .85s forwards;
+}
+
+.fade-leave-active{
+    animation: fade .85s reverse;
+}
+
+.fade-enter, .fade-leave-to{
+    opacity: 0;
+}
+
+@keyframes fade{
+    from{
+        opacity: 0;
+    }
+    to{
+        opacity: .7;
+    }
+}
